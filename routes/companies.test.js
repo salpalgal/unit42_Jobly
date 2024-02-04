@@ -106,7 +106,7 @@ describe("GET /companies", function () {
         logoUrl: "http://c1.img",
       }]
     })
-  });
+  })
   test("filter num", async function(){
     const res = await request(app).get("/companies").send({"min":"0","max":"3"})
     expect(res.body).toEqual({
