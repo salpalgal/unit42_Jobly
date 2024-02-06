@@ -1,0 +1,48 @@
+{
+    "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "default": {},
+    "title": "Root Schema",
+    "required": [
+    ],
+    "properties": {
+        "id":{
+            "type": "integer"
+        },
+        "title": {
+            "type": "string",
+            "default": "",
+            "title": "The title Schema",
+            "examples": [
+                "Editor, magazine features"
+            ]
+        },
+        "salary": {
+            "type": "integer",
+            "default": 0,
+            "title": "The salary Schema",
+            "examples": [
+                118000
+            ]
+        },
+        "equity": {
+            "type": "string",
+            "pattern": "0|(0?\\.[0-9]+)"
+        },
+        "company_handle": {
+            "type": "string",
+            "default": "",
+            "title": "The company_handle Schema",
+            "examples": [
+                "foster-rice"
+            ]
+        }
+    },
+    "examples": [{
+        "title": "Editor, magazine features",
+        "salary": 118000,
+        "equity": 0.002,
+        "company_handle": "foster-rice"
+    }]
+}
