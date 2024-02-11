@@ -35,7 +35,7 @@ router.post("/", ensureIsAdmin, async function (req, res, next) {
 
   router.get("/:title", async function (req, res, next) {
     try {
-      const job = await Job.get(req.params.handle);
+      const job = await Job.get(req.params.title);
       return res.json({ job });
     } catch (err) {
       return next(err);
@@ -50,7 +50,7 @@ router.post("/", ensureIsAdmin, async function (req, res, next) {
         throw new BadRequestError(errs);
       }
   
-      const job = await Job.update(req.params.handle, req.body);
+      const job = await Job.update(req.params.title, req.body);
       return res.json({ job });
     } catch (err) {
       return next(err);
@@ -60,8 +60,8 @@ router.post("/", ensureIsAdmin, async function (req, res, next) {
   
 router.delete("/:title", ensureIsAdmin, async function (req, res, next) {
     try {
-      await Job.remove(req.params.handle);
-      return res.json({ deleted: req.params.handle });
+      await Job.remove(req.params.title);
+      return res.json({ deleted: req.params.title });
     } catch (err) {
       return next(err);
     }

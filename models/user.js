@@ -103,16 +103,35 @@ class User {
 
   static async findAll() {
     const result = await db.query(
-          `SELECT username,
-                  first_name AS "firstName",
-                  last_name AS "lastName",
-                  email,
-                  is_admin AS "isAdmin"
-           FROM users
-           ORDER BY username`,
+          `SELECT u.username,
+                  u.first_name AS "firstName",
+                  u.last_name AS "lastName",
+                  u.email,
+                  u.is_admin AS "isAdmin",
+                  a.job_id
+           FROM users AS u
+           LEFT JOIN applications AS a
+           ON u.username = a.username
+           ORDER BY u.username`,
     );
-
-    return result.rows;
+    const results= result.rows
+    let arr = []
+    
+    for(let res in results){
+      const found = arr.some(item => item.username === results[res].username)
+      if(!found){
+        let{username,firstName,lastName,email,isAdmin} = results[res]
+        let obj ={username,firstName,lastName,email,isAdmin,job:[results[res].job_id]}
+        arr.push(obj)
+      }else{
+        function findObj(ob){
+          return ob.username === results[res].username
+        }
+        const foundObj = arr.find(findObj)
+        foundObj.job.push(results[res].job_id)
+      }
+    }
+    return arr;
   }
 
   /** Given a username, return data about user.
@@ -204,6 +223,19 @@ class User {
 
     if (!user) throw new NotFoundError(`No user: ${username}`);
   }
+  static async apply(username,job_id){
+   
+    let result = await db.query(
+      `INSERT INTO applications
+      (username,
+       job_id)
+      VALUES ($1, $2)
+      RETURNING job_id`,[username,job_id]
+    )
+    const job = result.rows[0]
+    console.log(job)
+    return job
+  } 
 }
 
 
